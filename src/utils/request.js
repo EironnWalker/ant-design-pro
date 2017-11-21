@@ -1,18 +1,26 @@
 import fetch from 'dva/fetch';
 import { notification } from 'antd';
+import { routerRedux } from 'dva/router';
 import { HEADER_TYPE, getLocalStorage } from './utils';
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
-  notification.error({
-    message: `请求错误 ${response.status}: ${response.url}`,
-    description: response.statusText,
-  });
-  const error = new Error(response.statusText);
-  error.response = response;
-  throw error;
+  // to login page
+  if (response.status === 301) {
+    console.log(response);
+    routerRedux.push('/user/login');
+  } else {
+    // error notification
+    notification.error({
+      message: `请求错误 ${response.status}: ${response.url}`,
+      description: response.statusText,
+    });
+    const error = new Error(response.statusText);
+    error.response = response;
+    throw error;
+  }
 }
 
 /**

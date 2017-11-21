@@ -1,5 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { accountLogin, fakeMobileLogin } from '../services/api';
+import { clearLocalStorage } from '../utils/utils';
 
 export default {
   namespace: 'login',
@@ -43,9 +44,10 @@ export default {
       yield put({
         type: 'changeLoginStatus',
         payload: {
-          status: false,
+          result: '-1',
         },
       });
+      yield clearLocalStorage();
       yield put(routerRedux.push('/user/login'));
     },
   },

@@ -10,6 +10,10 @@ export function setLocalStorage(valName, valValue) {
   localStorage.setItem(valName, valValue);
 }
 
+export function clearLocalStorage() {
+  localStorage.clear();
+}
+
 export function getLocalStorage(valName) {
   return localStorage.getItem(valName);
 }
