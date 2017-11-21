@@ -20,7 +20,7 @@ export default {
       const response = yield call(queryRule, payload);
       yield put({
         type: 'save',
-        payload: response,
+        payload: response.result === '1' ? response.data : null,
       });
       yield put({
         type: 'changeLoading',

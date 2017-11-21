@@ -15,7 +15,6 @@ export default {
         payload: true,
       });
       const response = yield call(accountLogin, payload);
-      console.log(response);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -55,8 +54,9 @@ export default {
     changeLoginStatus(state, { payload }) {
       return {
         ...state,
-        status: payload.status,
-        type: payload.type,
+        status: payload.result,
+        type: payload.data,
+        msg: payload.msg,
       };
     },
     changeSubmitting(state, { payload }) {
