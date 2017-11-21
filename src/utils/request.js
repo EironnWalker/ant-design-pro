@@ -1,5 +1,6 @@
 import fetch from 'dva/fetch';
 import { notification } from 'antd';
+import { HEADER_TYPE, getLocalStorage } from './utils';
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -34,6 +35,10 @@ export default function request(url, options) {
     };
     newOptions.body = JSON.stringify(newOptions.body);
   }
+  // 添加token认证
+  newOptions.headers = {
+    Authorization: HEADER_TYPE + getLocalStorage('token'),
+  };
   return fetch(url, newOptions)
     .then(checkStatus)
     .then(response => response.json())

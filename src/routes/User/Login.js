@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Form, Input, Tabs, Button, Icon, Alert } from 'antd';
+import { setLocalStorage } from '../../utils/utils';
 import styles from './Login.less';
 
 const FormItem = Form.Item;
@@ -19,6 +20,7 @@ export default class Login extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.login.status === '1') {
       this.props.dispatch(routerRedux.push('/'));
+      setLocalStorage('token', nextProps.login.data.token);
     }
   }
 

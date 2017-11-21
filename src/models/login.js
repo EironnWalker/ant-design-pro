@@ -55,7 +55,7 @@ export default {
       return {
         ...state,
         status: payload.result,
-        type: payload.data,
+        data: payload.data,
         msg: payload.msg,
       };
     },

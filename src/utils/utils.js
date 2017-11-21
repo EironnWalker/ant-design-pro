@@ -4,6 +4,16 @@ export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
 }
 
+export const HEADER_TYPE = 'Basic ';
+
+export function setLocalStorage(valName, valValue) {
+  localStorage.setItem(valName, valValue);
+}
+
+export function getLocalStorage(valName) {
+  return localStorage.getItem(valName);
+}
+
 export function getTimeDistance(type) {
   const now = new Date();
   const oneDay = 1000 * 60 * 60 * 24;
