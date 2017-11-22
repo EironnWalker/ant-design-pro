@@ -86,7 +86,7 @@ export default class Analysis extends Component {
                 className={styles.pieCard}
               >
                 <Row gutter={4} style={{ padding: '16px 0' }}>
-                  <Col span={8}>
+                  <Col span={22}>
                     <Pie
                       animate={false}
                       percent={chart.data === null ? 1 : chart.data.cpu}
@@ -106,7 +106,7 @@ export default class Analysis extends Component {
                 className={styles.pieCard}
               >
                 <Row gutter={4} style={{ padding: '16px 0' }}>
-                  <Col span={8}>
+                  <Col span={22}>
                     <Pie
                       animate={false}
                       percent={chart.data === null ? 1 : chart.data.mer}
@@ -126,7 +126,7 @@ export default class Analysis extends Component {
                 className={styles.pieCard}
               >
                 <Row gutter={4} style={{ padding: '16px 0' }}>
-                  <Col span={8}>
+                  <Col span={22}>
                     <Pie
                       animate={false}
                       percent={chart.data === null ? 1 : chart.data.storage}
