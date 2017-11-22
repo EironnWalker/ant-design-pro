@@ -90,7 +90,7 @@ export default class Analysis extends Component {
                     <Pie
                       animate={false}
                       percent={chart.data === null ? 1 : chart.data.cpu}
-                      total={chart.data === null ? '1%' : `${chart.data.cpu}'%'`}
+                      total={chart.data === null ? '1%' : `${chart.data.cpu}%`}
                       height={128}
                       lineWidth={2}
                     />
@@ -110,7 +110,7 @@ export default class Analysis extends Component {
                     <Pie
                       animate={false}
                       percent={chart.data === null ? 1 : chart.data.mer}
-                      total={chart.data === null ? '1%' : `${chart.data.mer}'%'`}
+                      total={chart.data === null ? '1%' : `${chart.data.mer}%`}
                       height={128}
                       lineWidth={2}
                     />
@@ -130,7 +130,7 @@ export default class Analysis extends Component {
                     <Pie
                       animate={false}
                       percent={chart.data === null ? 1 : chart.data.storage}
-                      total={chart.data === null ? '1%' : `${chart.data.storage}'%'`}
+                      total={chart.data === null ? '1%' : `${chart.data.storage}%`}
                       height={128}
                       lineWidth={2}
                     />
