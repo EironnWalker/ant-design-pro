@@ -69,7 +69,7 @@ export const getNavData = app => [
         path: 'dashboard',
         children: [
           {
-            name: '分析页',
+            name: '系统概况',
             path: 'analysis',
             component: dy(app, [ChartModel], Analysis),
           },

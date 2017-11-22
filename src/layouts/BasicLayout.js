@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Menu, Icon, Avatar, Dropdown, Tag, message, Spin } from 'antd';
+import { Layout, Menu, Icon, Avatar, Dropdown, Spin } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { Link, Route, Redirect, Switch } from 'dva/router';
-import moment from 'moment';
-import groupBy from 'lodash/groupBy';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
 import GlobalFooter from '../components/GlobalFooter';
@@ -172,33 +170,6 @@ class BasicLayout extends React.PureComponent {
     });
     return title;
   }
-  getNoticeData() {
-    const { notices = [] } = this.props;
-    if (notices.length === 0) {
-      return {};
-    }
-    const newNotices = notices.map((notice) => {
-      const newNotice = { ...notice };
-      if (newNotice.datetime) {
-        newNotice.datetime = moment(notice.datetime).fromNow();
-      }
-      // transform id to item key
-      if (newNotice.id) {
-        newNotice.key = newNotice.id;
-      }
-      if (newNotice.extra && newNotice.status) {
-        const color = ({
-          todo: '',
-          processing: 'blue',
-          urgent: 'red',
-          doing: 'gold',
-        })[newNotice.status];
-        newNotice.extra = <Tag color={color} style={{ marginRight: 0 }}>{newNotice.extra}</Tag>;
-      }
-      return newNotice;
-    });
-    return groupBy(newNotices, 'type');
-  }
   handleOpenChange = (openKeys) => {
     const lastOpenKey = openKeys[openKeys.length - 1];
     const isMainMenu = this.menus.some(
@@ -219,20 +190,6 @@ class BasicLayout extends React.PureComponent {
       event.initEvent('resize', true, false);
       window.dispatchEvent(event);
     }, 600);
-  }
-  handleNoticeClear = (type) => {
-    message.success(`清空了${type}`);
-    this.props.dispatch({
-      type: 'global/clearNotices',
-      payload: type,
-    });
-  }
-  handleNoticeVisibleChange = (visible) => {
-    if (visible) {
-      this.props.dispatch({
-        type: 'global/fetchNotices',
-      });
-    }
   }
   render() {
     const { currentUser, collapsed, getRouteData } = this.props;
@@ -310,7 +267,7 @@ class BasicLayout extends React.PureComponent {
                   )
                 )
               }
-              <Redirect exact from="/" to="/list/table-list" />
+              <Redirect exact from="/" to="/dashboard/analysis" />
               <Route component={NotFound} />
             </Switch>
             <GlobalFooter
@@ -351,6 +308,4 @@ class BasicLayout extends React.PureComponent {
 export default connect(state => ({
   currentUser: state.user.currentUser,
   collapsed: state.global.collapsed,
-  fetchingNotices: state.global.fetchingNotices,
-  notices: state.global.notices,
 }))(BasicLayout);
