@@ -40,6 +40,28 @@ export const getNavData = app => [
         ],
       },
       {
+        name: '基础设施',
+        path: 'basic',
+        icon: 'table',
+        children: [
+          {
+            name: '数据库',
+            path: 'database',
+            component: dynamicWrapper(app, ['database'], () => import('../routes/Basic/DatabaseList')),
+          },
+          {
+            name: 'Redis',
+            path: 'redis',
+            component: dynamicWrapper(app, ['redis'], () => import('../routes/Basic/RedisList')),
+          },
+          {
+            name: 'MQ',
+            path: 'mq',
+            component: dynamicWrapper(app, ['mq'], () => import('../routes/Basic/MqList')),
+          },
+        ],
+      },
+      {
         name: '表单页',
         path: 'form',
         icon: 'form',
