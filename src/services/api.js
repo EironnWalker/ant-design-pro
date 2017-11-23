@@ -9,8 +9,8 @@ export async function queryActivities() {
   return request('/api/activities');
 }
 
-export async function queryRule(params) {
-  return request(`/api/rule?${stringify(params)}`);
+export async function queryServerList(params) {
+  return request(`/api/serverList?${stringify(params)}`);
 }
 
 export async function removeRule(params) {
@@ -23,9 +23,9 @@ export async function removeRule(params) {
   });
 }
 
-export async function addRule(params) {
-  return request('/api/rule', {
-    method: 'POST',
+export async function querySreverInterface(params) {
+  return request('/api/serverDetail', {
+    method: 'GET',
     body: {
       ...params,
       method: 'post',

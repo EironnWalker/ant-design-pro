@@ -35,7 +35,7 @@ export const getNavData = app => [
           {
             name: '服务列表',
             path: 'table-list',
-            component: dynamicWrapper(app, ['rule'], () => import('../routes/List/TableList')),
+            component: dynamicWrapper(app, ['server'], () => import('../routes/Server/ServerList')),
           },
         ],
       },
