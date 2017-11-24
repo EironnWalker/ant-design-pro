@@ -1,4 +1,4 @@
-import { queryServerList, removeRule, querySreverInterface } from '../services/api';
+import { queryDbList, changeDatabaseStatus } from '../services/api';
 
 export default {
   namespace: 'database',
@@ -8,11 +8,9 @@ export default {
       list: [],
       pagination: {},
     },
-    interfaceData: {
-      list: [],
-    },
     loading: true,
-    interfaceLoading: true,
+    operationDone: false,
+    operationData: null,
   },
 
   effects: {
@@ -21,7 +19,7 @@ export default {
         type: 'changeLoading',
         payload: true,
       });
-      const response = yield call(queryServerList, payload);
+      const response = yield call(queryDbList, payload);
       yield put({
         type: 'save',
         payload: response.result === '1' ? response.data : null,
@@ -31,39 +29,18 @@ export default {
         payload: false,
       });
     },
-    *fetchDetail({ payload, callback }, { call, put }) {
+    *changeDbStatus({ payload }, { call, put }) {
+      const response = yield call(changeDatabaseStatus, payload);
       yield put({
-        type: 'changeDetailLoading',
-        payload: true,
-      });
-      const response = yield call(querySreverInterface, payload);
-      yield put({
-        type: 'saveInterface',
-        payload: response.result === '1' ? response.data : null,
-      });
-      yield put({
-        type: 'changeDetailLoading',
-        payload: false,
-      });
-
-      if (callback) callback();
-    },
-    *remove({ payload, callback }, { call, put }) {
-      yield put({
-        type: 'changeLoading',
-        payload: true,
-      });
-      const response = yield call(removeRule, payload);
-      yield put({
-        type: 'save',
+        type: 'changeStatus',
         payload: response,
       });
+    },
+    *resetOperation({ payload2 }, { put }) {
       yield put({
-        type: 'changeLoading',
-        payload: false,
+        type: 'resetStatus',
+        payload: payload2,
       });
-
-      if (callback) callback();
     },
   },
 
@@ -74,22 +51,24 @@ export default {
         data: action.payload,
       };
     },
-    saveInterface(state, action) {
+    changeStatus(state, action) {
       return {
         ...state,
-        interfaceData: action.payload,
+        operationDone: true,
+        operationData: action.payload,
+      };
+    },
+    resetStatus(state) {
+      return {
+        ...state,
+        operationDone: false,
+        operationData: null,
       };
     },
     changeLoading(state, action) {
       return {
         ...state,
         loading: action.payload,
-      };
-    },
-    changeDetailLoading(state, action) {
-      return {
-        ...state,
-        interfaceLoading: action.payload,
       };
     },
   },

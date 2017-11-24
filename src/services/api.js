@@ -13,6 +13,14 @@ export async function queryServerList(params) {
   return request(`/api/serverList?${stringify(params)}`);
 }
 
+export async function queryDbList(params) {
+  return request(`/api/databaseList?${stringify(params)}`);
+}
+
+export async function changeDatabaseStatus(params) {
+  return request(`/api/changeDatabaseStatus?${stringify(params)}`);
+}
+
 export async function removeRule(params) {
   return request('/api/rule', {
     method: 'POST',
