@@ -8,6 +8,20 @@ import styles from './MqList.less';
 const { Option } = Select;
 const FormItem = Form.Item;
 
+const operationTabList = [{
+  key: 'tab1',
+  tab: 'VHost',
+}, {
+  key: 'tab2',
+  tab: 'Queues',
+}, {
+  key: 'tab3',
+  tab: 'Exchanges',
+}, {
+  key: 'tab4',
+  tab: 'Channels',
+}];
+
 @connect(state => ({
   mq: state.mq,
 }))
@@ -20,6 +34,7 @@ export default class TableList extends PureComponent {
     createVisible: false,
     key: '',
     operationName: '',
+    operationkey: 'tab1',
   };
 
   componentDidMount() {
@@ -27,6 +42,10 @@ export default class TableList extends PureComponent {
     dispatch({
       type: 'mq/fetch',
     });
+  }
+
+  onOperationTabChange = (key) => {
+    this.setState({ operationkey: key });
   }
 
   handleFormReset = () => {
@@ -194,28 +213,90 @@ export default class TableList extends PureComponent {
       },
     ];
 
+    const contentList = {
+      tab1: (
+        <div className={styles.tableList}>
+          <div className={styles.tableListForm}>
+            {this.renderForm()}
+          </div>
+          <div className={styles.tableListOperator}>
+            <Button icon="plus" type="primary" onClick={() => this.handleCreateVisible(true)}>新建</Button>
+          </div>
+          <StandardTable
+            selectedRows={selectedRows}
+            loading={loading}
+            data={data}
+            columns={columns}
+            onSelectRow={this.handleSelectRows}
+          />
+        </div>
+      ),
+      tab2: (
+        <div className={styles.tableList}>
+          <div className={styles.tableListForm}>
+            {this.renderForm()}
+          </div>
+          <div className={styles.tableListOperator}>
+            <Button icon="plus" type="primary" onClick={() => this.handleCreateVisible(true)}>新建</Button>
+          </div>
+          <StandardTable
+            selectedRows={selectedRows}
+            loading={loading}
+            data={data}
+            columns={columns}
+            onSelectRow={this.handleSelectRows}
+          />
+        </div>
+      ),
+      tab3: (
+        <div className={styles.tableList}>
+          <div className={styles.tableListForm}>
+            {this.renderForm()}
+          </div>
+          <div className={styles.tableListOperator}>
+            <Button icon="plus" type="primary" onClick={() => this.handleCreateVisible(true)}>新建</Button>
+          </div>
+          <StandardTable
+            selectedRows={selectedRows}
+            loading={loading}
+            data={data}
+            columns={columns}
+            onSelectRow={this.handleSelectRows}
+          />
+        </div>
+      ),
+      tab4: (
+        <div className={styles.tableList}>
+          <div className={styles.tableListForm}>
+            {this.renderForm()}
+          </div>
+          <div className={styles.tableListOperator}>
+            <Button icon="plus" type="primary" onClick={() => this.handleCreateVisible(true)}>新建</Button>
+          </div>
+          <StandardTable
+            selectedRows={selectedRows}
+            loading={loading}
+            data={data}
+            columns={columns}
+            onSelectRow={this.handleSelectRows}
+          />
+        </div>
+      ),
+    };
+
     return (
       <PageHeaderLayout title="查询表格">
         {
           operationDone &&
           this.handleOperationDone(operationData)
         }
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListForm}>
-              {this.renderForm()}
-            </div>
-            <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleCreateVisible(true)}>新建</Button>
-            </div>
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={data}
-              columns={columns}
-              onSelectRow={this.handleSelectRows}
-            />
-          </div>
+        <Card
+          className={styles.tabsCard}
+          bordered={false}
+          tabList={operationTabList}
+          onTabChange={this.onOperationTabChange}
+        >
+          {contentList[this.state.operationkey]}
         </Card>
         <Modal
           title="确认操作"
