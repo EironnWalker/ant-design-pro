@@ -29,6 +29,14 @@ export async function changeRedisStatus(params) {
   return request(`/api/changeRedisStatus?${stringify(params)}`);
 }
 
+export async function queryMqList(params) {
+  return request(`/api/mqList?${stringify(params)}`);
+}
+
+export async function delMq(params) {
+  return request(`/api/delMq?${stringify(params)}`);
+}
+
 export async function removeRule(params) {
   return request('/api/rule', {
     method: 'POST',

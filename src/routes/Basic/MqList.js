@@ -1,17 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Card, Form, Input, Table, Select, Icon, Button, InputNumber, DatePicker, Modal, Badge } from 'antd';
-import moment from 'moment';
+import { Row, Col, Card, Form, Input, Select, Button, Modal, notification } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import DescriptionList from '../../components/DescriptionList';
-
 import styles from './MqList.less';
 
 const { Option } = Select;
-const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const { Description } = DescriptionList;
 const FormItem = Form.Item;
 
 @connect(state => ({
@@ -20,42 +14,17 @@ const FormItem = Form.Item;
 @Form.create()
 export default class TableList extends PureComponent {
   state = {
-    modalVisible: false,
     expandForm: false,
     selectedRows: [],
-    formValues: {},
+    visible: false,
+    key: '',
+    operationName: '',
   };
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'mq/fetch',
-    });
-  }
-
-  handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
-    const { formValues } = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-
-    const params = {
-      currentPage: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues,
-      ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
-
-    dispatch({
-      type: 'mq/fetch',
-      payload: params,
     });
   }
 
@@ -80,27 +49,6 @@ export default class TableList extends PureComponent {
     });
   }
 
-  handleShowModal = (flag, key) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'mq/fetchDetail',
-      payload: {
-        id: key,
-      },
-      callback: () => {
-        this.setState({
-          modalVisible: true,
-        });
-      },
-    });
-  };
-
-  handleModalVisible = (flag) => {
-    this.setState({
-      modalVisible: !!flag,
-    });
-  }
-
   handleSearch = (e) => {
     e.preventDefault();
     const { dispatch, form } = this.props;
@@ -114,6 +62,47 @@ export default class TableList extends PureComponent {
         type: 'mq/fetch',
         payload: values,
       });
+    });
+  }
+
+  handleDeleteModal = (keyParam, instantName) => {
+    this.setState({
+      visible: true,
+      key: keyParam,
+      operationName: instantName,
+    });
+  }
+  handleOk = () => {
+    const { dispatch } = this.props;
+    this.setState({
+      visible: false,
+    });
+    dispatch({
+      type: 'mq/deleteMq',
+      payload: {
+        id: this.state.key,
+      },
+    });
+  }
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
+  }
+  handleOperationDone = (operationData) => {
+    const { dispatch } = this.props;
+    if (operationData.result === '1') {
+      dispatch({
+        type: 'mq/fetch',
+      });
+    } else {
+      notification.error({
+        message: '操作发生错误',
+        description: operationData.msg,
+      });
+    }
+    dispatch({
+      type: 'mq/resetOperation',
     });
   }
 
@@ -143,9 +132,6 @@ export default class TableList extends PureComponent {
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">查询</Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-              <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                展开 <Icon type="down" />
-              </a>
             </span>
           </Col>
         </Row>
@@ -153,166 +139,39 @@ export default class TableList extends PureComponent {
     );
   }
 
-  renderAdvancedForm() {
-    const { getFieldDecorator } = this.props.form;
-    return (
-      <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="规则编号">
-              {getFieldDecorator('no')(
-                <Input placeholder="请输入" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="调用次数">
-              {getFieldDecorator('number')(
-                <InputNumber style={{ width: '100%' }} />
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="更新日期">
-              {getFieldDecorator('date')(
-                <DatePicker style={{ width: '100%' }} placeholder="请输入更新日期" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status3')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status4')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <div style={{ overflow: 'hidden' }}>
-          <span style={{ float: 'right', marginBottom: 24 }}>
-            <Button type="primary" htmlType="submit">查询</Button>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-            <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-              收起 <Icon type="up" />
-            </a>
-          </span>
-        </div>
-      </Form>
-    );
-  }
-
   renderForm() {
-    return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
+    return this.renderSimpleForm();
   }
 
   render() {
-    const { mq: { loading, data, interfaceData, interfaceLoading } } = this.props;
-    const { selectedRows, modalVisible } = this.state;
-    const status = ['关闭', '运行中', '已上线', '异常'];
-    const interfaceColumns = [
+    const { mq: { loading, data, operationDone, operationData } } = this.props;
+    const { selectedRows } = this.state;
+    const columns = [
       {
-        title: '接口名',
+        title: '名字',
         dataIndex: 'name',
       },
       {
-        title: '接口说明',
-        dataIndex: 'desc',
+        title: '用户',
+        dataIndex: 'users',
       },
       {
-        title: '接口类型',
-        dataIndex: 'type',
+        title: '就绪消息数',
+        dataIndex: 'readyMsgs',
       },
       {
-        title: '接口版本',
-        dataIndex: 'version',
-      },
-    ];
-    const columns = [
-      {
-        title: '应用名',
-        dataIndex: 'appName',
+        title: '未确认消息数',
+        dataIndex: 'unackedMsgs',
       },
       {
-        title: '实例名',
-        dataIndex: 'instantName',
-      },
-      {
-        title: '状态',
-        dataIndex: 'status',
-        filters: [
-          {
-            text: status[0],
-            value: 0,
-          },
-          {
-            text: status[1],
-            value: 1,
-          },
-          {
-            text: status[2],
-            value: 2,
-          },
-          {
-            text: status[3],
-            value: 3,
-          },
-        ],
-        render(val) {
-          return <Badge status={statusMap[val]} text={status[val]} />;
-        },
-      },
-      {
-        title: '注册时间',
-        dataIndex: 'registryTime',
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        title: '数据中心',
-        dataIndex: 'dataCenter',
-      },
-      {
-        title: 'IP',
-        dataIndex: 'ip',
-      },
-      {
-        title: '端口',
-        dataIndex: 'port',
-      },
-      {
-        title: '更新时间',
-        dataIndex: 'updateTime',
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+        title: '总消息数',
+        dataIndex: 'totalMsgs',
       },
       {
         title: '操作',
-        render: () => (
+        render: (text, record) => (
           <div>
-            <a onClick={() => this.handleShowModal()}>详情</a>
+            <a onClick={() => this.handleDeleteModal(record.id, record.name)}>删除</a>
           </div>
         ),
       },
@@ -320,6 +179,10 @@ export default class TableList extends PureComponent {
 
     return (
       <PageHeaderLayout title="查询表格">
+        {
+          operationDone &&
+          this.handleOperationDone(operationData)
+        }
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
@@ -335,31 +198,12 @@ export default class TableList extends PureComponent {
           </div>
         </Card>
         <Modal
-          title="服务详情"
-          visible={modalVisible}
-          onCancel={() => this.handleModalVisible()}
-          width="50%"
-          footer={null}
+          title="确认操作"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
         >
-          <Card className={styles.card} bordered={false}>
-            <DescriptionList size="large" style={{ marginBottom: 32 }}>
-              <Description term="版本号">{interfaceData.version}</Description>
-              <Description term="CPU利用率">{interfaceData.cpu}</Description>
-              <Description term="内存使用量">{interfaceData.mer}</Description>
-              <Description term="QPS">{interfaceData.QPS}</Description>
-              <Description term="记录数">{interfaceData.counts}</Description>
-            </DescriptionList>
-          </Card>
-
-          <Table
-            style={{ marginBottom: 24 }}
-            pagination={false}
-            loading={interfaceLoading}
-            dataSource={interfaceData.list}
-            columns={interfaceColumns}
-            rowKey="id"
-          />
-
+          <p>你确定要对【{this.state.operationName}】执行【删除】操作吗？</p>
         </Modal>
       </PageHeaderLayout>
     );
