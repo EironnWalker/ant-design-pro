@@ -21,6 +21,14 @@ export async function changeDatabaseStatus(params) {
   return request(`/api/changeDatabaseStatus?${stringify(params)}`);
 }
 
+export async function queryRedisList(params) {
+  return request(`/api/redisList?${stringify(params)}`);
+}
+
+export async function changeRedisStatus(params) {
+  return request(`/api/changeRedisStatus?${stringify(params)}`);
+}
+
 export async function removeRule(params) {
   return request('/api/rule', {
     method: 'POST',
