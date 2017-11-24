@@ -17,6 +17,7 @@ export default class TableList extends PureComponent {
     expandForm: false,
     selectedRows: [],
     visible: false,
+    createVisible: false,
     key: '',
     operationName: '',
   };
@@ -46,6 +47,22 @@ export default class TableList extends PureComponent {
   handleSelectRows = (rows) => {
     this.setState({
       selectedRows: rows,
+    });
+  }
+
+  handleCreateVisible = () => {
+    this.setState({
+      createVisible: true,
+    });
+  }
+  handleCreateOk = () => {
+    this.setState({
+      createVisible: false,
+    });
+  }
+  handleCreateCancel = () => {
+    this.setState({
+      createVisible: false,
     });
   }
 
@@ -188,6 +205,9 @@ export default class TableList extends PureComponent {
             <div className={styles.tableListForm}>
               {this.renderForm()}
             </div>
+            <div className={styles.tableListOperator}>
+              <Button icon="plus" type="primary" onClick={() => this.handleCreateVisible(true)}>新建</Button>
+            </div>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
@@ -204,6 +224,14 @@ export default class TableList extends PureComponent {
           onCancel={this.handleCancel}
         >
           <p>你确定要对【{this.state.operationName}】执行【删除】操作吗？</p>
+        </Modal>
+        <Modal
+          title="新建操作"
+          visible={this.state.createVisible}
+          onOk={this.handleCreateOk}
+          onCancel={this.handleCreateCancel}
+        >
+          <p>新建操作...</p>
         </Modal>
       </PageHeaderLayout>
     );
