@@ -13,6 +13,10 @@ export async function queryServerList(params) {
   return request(`/api/serverList?${stringify(params)}`);
 }
 
+export async function queryAuthAppList(params) {
+  return request(`/api/authAppList?${stringify(params)}`);
+}
+
 export async function queryDbList(params) {
   return request(`/api/databaseList?${stringify(params)}`);
 }
@@ -49,6 +53,26 @@ export async function removeRule(params) {
 
 export async function querySreverInterface(params) {
   return request('/api/serverDetail', {
+    method: 'GET',
+    body: {
+      ...params,
+      method: 'post',
+    },
+  });
+}
+
+export async function queryOpenAuthList(params) {
+  return request('/api/openAuthList', {
+    method: 'GET',
+    body: {
+      ...params,
+      method: 'post',
+    },
+  });
+}
+
+export async function queryRequiredAuthList(params) {
+  return request('/api/requiredAuthList', {
     method: 'GET',
     body: {
       ...params,

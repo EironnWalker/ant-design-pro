@@ -62,6 +62,18 @@ export const getNavData = app => [
         ],
       },
       {
+        name: '权限管理',
+        path: 'auth',
+        icon: 'table',
+        children: [
+          {
+            name: '应用权限管理',
+            path: 'authApp',
+            component: dynamicWrapper(app, ['authApp'], () => import('../routes/Auth/AuthApp')),
+          },
+        ],
+      },
+      {
         name: '表单页',
         path: 'form',
         icon: 'form',
