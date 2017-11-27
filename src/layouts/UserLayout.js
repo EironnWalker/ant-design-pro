@@ -30,10 +30,10 @@ class UserLayout extends React.PureComponent {
   getPageTitle() {
     const { getRouteData, location } = this.props;
     const { pathname } = location;
-    let title = 'WeDs Demo';
+    let title = 'WeDs 控制台';
     getRouteData('UserLayout').forEach((item) => {
       if (item.path === pathname) {
-        title = `${item.name} - WeDs Demo`;
+        title = `${item.name} - WeDs 控制台`;
       }
     });
     return title;
@@ -48,7 +48,7 @@ class UserLayout extends React.PureComponent {
             <div className={styles.header}>
               <Link to="/">
                 <img alt="" className={styles.logo} src="https://gw.alipayobjects.com/zos/rmsportal/NGCCBOENpgTXpBWUIPnI.svg" />
-                <span className={styles.title}>WeDs Demo</span>
+                <span className={styles.title}>WeDs 控制台</span>
               </Link>
             </div>
             <div className={styles.desc}>后台管理平台示例项目，Powered By Ant Design</div>
