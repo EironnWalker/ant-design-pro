@@ -4,7 +4,7 @@ import { LocaleProvider, Spin } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import dynamic from 'dva/dynamic';
 import cloneDeep from 'lodash/cloneDeep';
-import { getNavData } from './common/nav';
+import { getNavData, getNavLoginData } from './common/nav';
 import { getPlainNode } from './utils/utils';
 
 import styles from './index.less';
@@ -38,15 +38,20 @@ function getLayout(navData, path) {
 }
 
 function RouterConfig({ history, app }) {
-  const navData = getNavData(app);
-  const UserLayout = getLayout(navData, 'UserLayout').component;
-  const BasicLayout = getLayout(navData, 'BasicLayout').component;
+  const navLoginData = getNavLoginData(app);
+  const navMenuData = getNavData(app);
+  const UserLayout = getLayout(navLoginData, 'UserLayout').component;
+  const BasicLayout = getLayout(navMenuData, 'BasicLayout').component;
 
   const passProps = {
     app,
-    navData,
-    getRouteData: (path) => {
-      return getRouteData(navData, path);
+    navMenuData,
+    navLoginData,
+    getRouteMenuData: (path) => {
+      return getRouteData(navMenuData, path);
+    },
+    getRouteLoginData: (path) => {
+      return getRouteData(navLoginData, path);
     },
   };
 

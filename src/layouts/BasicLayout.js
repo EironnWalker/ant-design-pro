@@ -42,15 +42,15 @@ class BasicLayout extends React.PureComponent {
   constructor(props) {
     super(props);
     // 把一级 Layout 的 children 作为菜单项
-    this.menus = props.navData.reduce((arr, current) => arr.concat(current.children), []);
+    this.menus = props.navMenuData.reduce((arr, current) => arr.concat(current.children), []);
     this.state = {
       openKeys: this.getDefaultCollapsedSubMenus(props),
     };
   }
   getChildContext() {
-    const { location, navData, getRouteData } = this.props;
-    const routeData = getRouteData('BasicLayout');
-    const firstMenuData = navData.reduce((arr, current) => arr.concat(current.children), []);
+    const { location, navMenuData, getRouteMenuData } = this.props;
+    const routeData = getRouteMenuData('BasicLayout');
+    const firstMenuData = navMenuData.reduce((arr, current) => arr.concat(current.children), []);
     const menuData = this.getMenuData(firstMenuData, '');
     const breadcrumbNameMap = {};
 
@@ -160,12 +160,12 @@ class BasicLayout extends React.PureComponent {
     });
   }
   getPageTitle() {
-    const { location, getRouteData } = this.props;
+    const { location, getRouteMenuData } = this.props;
     const { pathname } = location;
     let title = 'Weds Demo';
-    getRouteData('BasicLayout').forEach((item) => {
+    getRouteMenuData('BasicLayout').forEach((item) => {
       if (item.path === pathname) {
-        title = `${item.name} - Weds Demo`;
+        title = `${item.name} - WeDs 控制台`;
       }
     });
     return title;
@@ -192,7 +192,7 @@ class BasicLayout extends React.PureComponent {
     }, 600);
   }
   render() {
-    const { currentUser, collapsed, getRouteData } = this.props;
+    const { currentUser, collapsed, getRouteMenuData } = this.props;
 
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
@@ -257,7 +257,7 @@ class BasicLayout extends React.PureComponent {
             <div style={{ minHeight: 'calc(100vh - 260px)' }}>
               <Switch>
                 {
-                  getRouteData('BasicLayout').map(item =>
+                  getRouteMenuData('BasicLayout').map(item =>
                     (
                       <Route
                         exact={item.exact}

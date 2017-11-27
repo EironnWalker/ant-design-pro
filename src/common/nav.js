@@ -75,6 +75,10 @@ export const getNavData = app => [
       },
     ],
   },
+];
+
+// nav Login data
+export const getNavLoginData = app => [
   {
     component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
     path: '/user',
@@ -103,15 +107,5 @@ export const getNavData = app => [
         ],
       },
     ],
-  },
-  {
-    component: dynamicWrapper(app, [], () => import('../layouts/BlankLayout')),
-    layout: 'BlankLayout',
-    children: {
-      name: '使用文档',
-      path: 'http://pro.ant.design/docs/getting-started',
-      target: '_blank',
-      icon: 'book',
-    },
   },
 ];

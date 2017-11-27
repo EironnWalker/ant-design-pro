@@ -28,10 +28,10 @@ class UserLayout extends React.PureComponent {
     return { location };
   }
   getPageTitle() {
-    const { getRouteData, location } = this.props;
+    const { getRouteLoginData, location } = this.props;
     const { pathname } = location;
     let title = 'WeDs 控制台';
-    getRouteData('UserLayout').forEach((item) => {
+    getRouteLoginData('UserLayout').forEach((item) => {
       if (item.path === pathname) {
         title = `${item.name} - WeDs 控制台`;
       }
@@ -39,7 +39,7 @@ class UserLayout extends React.PureComponent {
     return title;
   }
   render() {
-    const { getRouteData } = this.props;
+    const { getRouteLoginData } = this.props;
 
     return (
       <DocumentTitle title={this.getPageTitle()}>
@@ -54,7 +54,7 @@ class UserLayout extends React.PureComponent {
             <div className={styles.desc}>后台管理平台示例项目，Powered By Ant Design</div>
           </div>
           {
-            getRouteData('UserLayout').map(item =>
+            getRouteLoginData('UserLayout').map(item =>
               (
                 <Route
                   exact={item.exact}
