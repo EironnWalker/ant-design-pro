@@ -35,8 +35,7 @@ class StandardTable extends PureComponent {
   render() {
     const { selectedRowKeys } = this.state;
     const { data: { list, pagination }, loading, columns, rowSelection } = this.props;
-
-    const paginationProps = {
+    const paginationProps = typeof (pagination) === 'undefined' ? false : {
       showSizeChanger: true,
       showQuickJumper: true,
       ...pagination,

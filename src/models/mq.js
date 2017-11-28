@@ -1,4 +1,4 @@
-import { queryMqList, delMq } from '../services/api';
+import { queryMqList, delMq, queryQueuesList, queryExchangesList, queryChannelsList } from '../services/api';
 
 export default {
   namespace: 'mq',
@@ -14,7 +14,7 @@ export default {
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
+    *fetch({ payload, callback }, { call, put }) {
       yield put({
         type: 'changeLoading',
         payload: true,
@@ -28,6 +28,55 @@ export default {
         type: 'changeLoading',
         payload: false,
       });
+      if (callback) callback();
+    },
+    *fetchQueues({ payload, callback }, { call, put }) {
+      yield put({
+        type: 'changeLoading',
+        payload: true,
+      });
+      const response = yield call(queryQueuesList, payload);
+      yield put({
+        type: 'save',
+        payload: response.result === '1' ? response.data : null,
+      });
+      yield put({
+        type: 'changeLoading',
+        payload: false,
+      });
+      if (callback) callback();
+    },
+    *fetchExchanges({ payload, callback }, { call, put }) {
+      yield put({
+        type: 'changeLoading',
+        payload: true,
+      });
+      const response = yield call(queryExchangesList, payload);
+      yield put({
+        type: 'save',
+        payload: response.result === '1' ? response.data : null,
+      });
+      yield put({
+        type: 'changeLoading',
+        payload: false,
+      });
+      if (callback) callback();
+    },
+    *fetchChannels({ payload, callback }, { call, put }) {
+      yield put({
+        type: 'changeLoading',
+        payload: true,
+      });
+      const response = yield call(queryChannelsList, payload);
+      yield put({
+        type: 'save',
+        payload: response.result === '1' ? response.data : null,
+      });
+      yield put({
+        type: 'changeLoading',
+        payload: false,
+      });
+      if (callback) callback();
     },
     *deleteMq({ payload }, { call, put }) {
       const response = yield call(delMq, payload);

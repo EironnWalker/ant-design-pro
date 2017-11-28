@@ -41,6 +41,18 @@ export async function delMq(params) {
   return request(`/api/delMq?${stringify(params)}`);
 }
 
+export async function queryQueuesList(params) {
+  return request(`/api/queuesList?${stringify(params)}`);
+}
+
+export async function queryExchangesList(params) {
+  return request(`/api/exchangesList?${stringify(params)}`);
+}
+
+export async function queryChannelsList(params) {
+  return request(`/api/channelsList?${stringify(params)}`);
+}
+
 export async function removeRule(params) {
   return request('/api/rule', {
     method: 'POST',

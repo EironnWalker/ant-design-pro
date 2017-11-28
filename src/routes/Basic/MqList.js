@@ -45,7 +45,47 @@ export default class TableList extends PureComponent {
   }
 
   onOperationTabChange = (key) => {
-    this.setState({ operationkey: key });
+    const { dispatch } = this.props;
+    switch (key) {
+      case 'tab1':
+        dispatch({
+          type: 'mq/fetch',
+          payload: {},
+          callback: () => {
+            this.setState({ operationkey: key });
+          },
+        });
+        break;
+      case 'tab2':
+        dispatch({
+          type: 'mq/fetchQueues',
+          payload: {},
+          callback: () => {
+            this.setState({ operationkey: key });
+          },
+        });
+        break;
+      case 'tab3':
+        dispatch({
+          type: 'mq/fetchExchanges',
+          payload: {},
+          callback: () => {
+            this.setState({ operationkey: key });
+          },
+        });
+        break;
+      case 'tab4':
+        dispatch({
+          type: 'mq/fetchChannels',
+          payload: {},
+          callback: () => {
+            this.setState({ operationkey: key });
+          },
+        });
+        break;
+      default:
+        break;
+    }
   }
 
   handleFormReset = () => {
@@ -188,10 +228,6 @@ export default class TableList extends PureComponent {
         dataIndex: 'name',
       },
       {
-        title: '用户',
-        dataIndex: 'users',
-      },
-      {
         title: '就绪消息数',
         dataIndex: 'readyMsgs',
       },
@@ -202,6 +238,147 @@ export default class TableList extends PureComponent {
       {
         title: '总消息数',
         dataIndex: 'totalMsgs',
+      },
+      {
+        title: '操作',
+        render: (text, record) => (
+          <div>
+            <a onClick={() => this.handleDeleteModal(record.id, record.name)}>删除</a>
+          </div>
+        ),
+      },
+    ];
+
+    const columnsChannels = [
+      {
+        title: 'Channel',
+        dataIndex: 'channel',
+      },
+      {
+        title: 'Node',
+        dataIndex: 'node',
+      },
+      {
+        title: 'Virtual host',
+        dataIndex: 'vhost',
+      },
+      {
+        title: 'User name',
+        dataIndex: 'userName',
+      },
+      {
+        title: 'State',
+        dataIndex: 'state',
+      },
+      {
+        title: 'Unconfirmed',
+        dataIndex: 'unconfirmed',
+      },
+      {
+        title: 'Prefetch',
+        dataIndex: 'prefetch',
+      },
+      {
+        title: 'Unacked',
+        dataIndex: 'unacked',
+      },
+      {
+        title: 'publish',
+        dataIndex: 'publish',
+      },
+      {
+        title: 'confirm',
+        dataIndex: 'confirm',
+      },
+      {
+        title: 'deliver / get',
+        dataIndex: 'deliverGet',
+      },
+      {
+        title: 'ack',
+        dataIndex: 'ack',
+      },
+      {
+        title: '操作',
+        render: (text, record) => (
+          <div>
+            <a onClick={() => this.handleDeleteModal(record.id, record.name)}>删除</a>
+          </div>
+        ),
+      },
+    ];
+
+    const columnsExchanges = [
+      {
+        title: 'Virtual host',
+        dataIndex: 'vhost',
+      },
+      {
+        title: 'Name',
+        dataIndex: 'name',
+      },
+      {
+        title: 'Type',
+        dataIndex: 'type',
+      },
+      {
+        title: 'Message rate in',
+        dataIndex: 'messageRateIn',
+      },
+      {
+        title: 'Message rate out',
+        dataIndex: 'messageRateOut',
+      },
+      {
+        title: '操作',
+        render: (text, record) => (
+          <div>
+            <a onClick={() => this.handleDeleteModal(record.id, record.name)}>删除</a>
+          </div>
+        ),
+      },
+    ];
+
+    const columnsQueues = [
+      {
+        title: 'Virtual Host',
+        dataIndex: 'vhost',
+      },
+      {
+        title: 'Name',
+        dataIndex: 'name',
+      },
+      {
+        title: 'Node',
+        dataIndex: 'node',
+      },
+      {
+        title: 'State',
+        dataIndex: 'state',
+      },
+      {
+        title: 'Ready',
+        dataIndex: 'ready',
+      },
+      {
+        title: 'Unacked',
+        dataIndex: 'unacked',
+      },
+      {
+        title: 'Total',
+        dataIndex: 'total',
+      },
+      {
+        title: 'incoming',
+        dataIndex: 'incoming',
+      },
+      {
+        title: 'deliver / get',
+        dataIndex: 'deliverGet',
+      },
+      {
+        title: 'ack',
+        dataIndex: 'ack',
       },
       {
         title: '操作',
@@ -243,7 +420,7 @@ export default class TableList extends PureComponent {
             selectedRows={selectedRows}
             loading={loading}
             data={data}
-            columns={columns}
+            columns={columnsQueues}
             onSelectRow={this.handleSelectRows}
           />
         </div>
@@ -260,7 +437,7 @@ export default class TableList extends PureComponent {
             selectedRows={selectedRows}
             loading={loading}
             data={data}
-            columns={columns}
+            columns={columnsExchanges}
             onSelectRow={this.handleSelectRows}
           />
         </div>
@@ -277,7 +454,7 @@ export default class TableList extends PureComponent {
             selectedRows={selectedRows}
             loading={loading}
             data={data}
-            columns={columns}
+            columns={columnsChannels}
             onSelectRow={this.handleSelectRows}
           />
         </div>
