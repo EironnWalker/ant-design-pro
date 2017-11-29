@@ -13,6 +13,10 @@ export async function queryServerList(params) {
   return request(`/api/serverList?${stringify(params)}`);
 }
 
+export async function queryEquipmentList(params) {
+  return request(`/api/equipmentList?${stringify(params)}`);
+}
+
 export async function queryAuthAppList(params) {
   return request(`/api/authAppList?${stringify(params)}`);
 }

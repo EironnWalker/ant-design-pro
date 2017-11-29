@@ -73,6 +73,30 @@ export const getNavData = app => [
           },
         ],
       },
+      {
+        name: '设备管理',
+        path: 'equipment',
+        icon: 'table',
+        children: [
+          {
+            name: '设备列表',
+            path: 'equipmentList',
+            component: dynamicWrapper(app, ['equipmentList'], () => import('../routes/Equipment/EquipmentList')),
+          },
+        ],
+      },
+      {
+        name: '日志管理',
+        path: 'log',
+        icon: 'table',
+        children: [
+          {
+            name: '日志列表',
+            path: 'logList',
+            component: dynamicWrapper(app, ['logList'], () => import('../routes/Log/LogList')),
+          },
+        ],
+      },
     ],
   },
 ];
