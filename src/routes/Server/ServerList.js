@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Card, Form, Input, Table, Select, Icon, Button, InputNumber, DatePicker, Modal, Badge } from 'antd';
+import { Row, Col, Card, Form, Input, Table, Select, Icon, Button, InputNumber, DatePicker, Modal } from 'antd';
 import moment from 'moment';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -10,7 +10,6 @@ import styles from './ServerList.less';
 
 const { Option } = Select;
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
 
@@ -232,7 +231,6 @@ export default class TableList extends PureComponent {
   render() {
     const { server: { loading, data, interfaceData, interfaceLoading } } = this.props;
     const { selectedRows, modalVisible } = this.state;
-    const status = ['关闭', '运行中', '已上线', '异常'];
     const interfaceColumns = [
       {
         title: '接口名',
@@ -263,27 +261,6 @@ export default class TableList extends PureComponent {
       {
         title: '状态',
         dataIndex: 'status',
-        filters: [
-          {
-            text: status[0],
-            value: 0,
-          },
-          {
-            text: status[1],
-            value: 1,
-          },
-          {
-            text: status[2],
-            value: 2,
-          },
-          {
-            text: status[3],
-            value: 3,
-          },
-        ],
-        render(val) {
-          return <Badge status={statusMap[val]} text={status[val]} />;
-        },
       },
       {
         title: '注册时间',
