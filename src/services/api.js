@@ -17,6 +17,10 @@ export async function queryEquipmentList(params) {
   return request(`/api/equipmentList?${stringify(params)}`);
 }
 
+export async function queryEquipmentDetailList(params) {
+  return request(`/api/equipmentDetailList?${stringify(params)}`);
+}
+
 export async function queryAuthAppList(params) {
   return request(`/api/authAppList?${stringify(params)}`);
 }

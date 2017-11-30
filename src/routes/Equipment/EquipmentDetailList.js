@@ -4,14 +4,14 @@ import { Row, Col, Card, Form, Input, Select, Icon, Button, InputNumber, DatePic
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
-import styles from './EquipmentList.less';
+import styles from './EquipmentDetailList.less';
 
 const { Option } = Select;
 const FormItem = Form.Item;
 const statusMap = ['success', 'error'];
 
 @connect(state => ({
-  equipmentList: state.equipmentList,
+  equipmentDetailList: state.equipmentDetailList,
 }))
 @Form.create()
 export default class TableList extends PureComponent {
@@ -25,7 +25,7 @@ export default class TableList extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'equipmentList/fetch',
+      type: 'equipmentDetailList/fetch',
     });
   }
 
@@ -33,7 +33,7 @@ export default class TableList extends PureComponent {
     const { form, dispatch } = this.props;
     form.resetFields();
     dispatch({
-      type: 'equipmentList/fetch',
+      type: 'equipmentDetailList/fetch',
       payload: {},
     });
   }
@@ -72,7 +72,7 @@ export default class TableList extends PureComponent {
         ...fieldsValue,
       };
       dispatch({
-        type: 'equipmentList/fetch',
+        type: 'equipmentDetailList/fetch',
         payload: values,
       });
     });
@@ -84,19 +84,19 @@ export default class TableList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="应用名">
-              {getFieldDecorator('name')(
-                <Input placeholder="请输入" />
+            <FormItem label="服务器ID">
+              {getFieldDecorator('serverId')(
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="0">1000</Option>
+                  <Option value="1">1001</Option>
+                </Select>
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
+            <FormItem label="应用名">
+              {getFieldDecorator('name')(
+                <Input placeholder="请输入" />
               )}
             </FormItem>
           </Col>
@@ -191,72 +191,36 @@ export default class TableList extends PureComponent {
   }
 
   render() {
-    const { equipmentList: { loading, data } } = this.props;
+    const { equipmentDetailList: { loading, data } } = this.props;
     const { selectedRows, modalVisible, inputValue } = this.state;
-    const status = ['启动', '关闭'];
-    const pageHeaderExtra = (
-      <div className={styles.pageHeaderExtra}>
-        <div>
-          <p>设备总数</p>
-          <p>56</p>
-        </div>
-        <div>
-          <p>在线设备数</p>
-          <p>8</p>
-        </div>
-        <div>
-          <p>故障设备</p>
-          <p>5</p>
-        </div>
-      </div>
-    );
+    const onlineStatus = ['在线', '离线'];
     const columns = [
       {
-        title: '网关编号',
-        dataIndex: 'gatewayNo',
+        title: '服务器ID',
+        dataIndex: 'serverId',
       },
       {
-        title: '网关名称',
-        dataIndex: 'gatewayName',
+        title: '设备ID',
+        dataIndex: 'equipmentId',
       },
       {
-        title: '网关IP',
-        dataIndex: 'gatewayIP',
-      },
-      {
-        title: '设备数',
+        title: '设备编号',
         dataIndex: 'equipmentNo',
       },
       {
-        title: '在线数',
-        dataIndex: 'onlineNo',
+        title: '设备名称',
+        dataIndex: 'equipmentName',
       },
       {
-        title: '离线数',
-        dataIndex: 'offlineNo',
-      },
-      {
-        title: '故障数',
-        dataIndex: 'faultyNo',
-      },
-      {
-        title: '上行带宽',
-        dataIndex: 'upSpeed',
-      },
-      {
-        title: '下行带宽',
-        dataIndex: 'downSpeed',
-      },
-      {
-        title: '是否启用',
-        dataIndex: 'enable',
+        title: '是否在线',
+        dataIndex: 'online',
         filters: [
           {
-            text: status[0],
+            text: onlineStatus[0],
             value: true,
           },
           {
-            text: status[1],
+            text: onlineStatus[1],
             value: false,
           },
         ],
@@ -264,38 +228,44 @@ export default class TableList extends PureComponent {
           return (
             <Badge
               status={statusMap[val === true ? 0 : 1]}
-              text={status[val === true ? 0 : 1]}
+              text={onlineStatus[val === true ? 0 : 1]}
             />
           );
         },
       },
       {
-        title: '自动添加设备',
-        dataIndex: 'auto',
-        filters: [
-          {
-            text: status[0],
-            value: true,
-          },
-          {
-            text: status[1],
-            value: false,
-          },
-        ],
-        render(val) {
-          return (
-            <Badge
-              status={statusMap[val === true ? 0 : 1]}
-              text={status[val === true ? 0 : 1]}
-            />
-          );
-        },
+        title: '设备类型',
+        dataIndex: 'equipmentType',
+      },
+      {
+        title: '设备用途',
+        dataIndex: 'equipmentPurpose',
+      },
+      {
+        title: '设备IP',
+        dataIndex: 'equipmentIp',
+      },
+      {
+        title: '设备端口',
+        dataIndex: 'equipmentPort',
+      },
+      {
+        title: '设备MAC',
+        dataIndex: 'mac',
+      },
+      {
+        title: '子网掩码',
+        dataIndex: 'mask',
+      },
+      {
+        title: '网关',
+        dataIndex: 'gateway',
       },
     ];
 
     return (
       <PageHeaderLayout
-        extraContent={pageHeaderExtra}
+        title="查询表格"
       >
         <Card bordered={false}>
           <div className={styles.tableList}>
@@ -304,9 +274,6 @@ export default class TableList extends PureComponent {
             </div>
             <div className={styles.tableListOperator}>
               <Button icon="sync" type="primary" onClick={() => this.handleRefresh()}>刷新</Button>
-              <Button icon="caret-right" type="primary" onClick={() => this.handleRefresh()}>启用设备自动添加</Button>
-              <Button icon="minus-circle" type="primary" onClick={() => this.handleRefresh()}>禁用设备自动添加</Button>
-              <Button icon="info-circle" type="primary" onClick={() => this.handleRefresh()}>重命名</Button>
             </div>
             <StandardTable
               selectedRows={selectedRows}

@@ -79,9 +79,14 @@ export const getNavData = app => [
         icon: 'table',
         children: [
           {
-            name: '设备列表',
+            name: '设备概况',
             path: 'equipmentList',
             component: dynamicWrapper(app, ['equipmentList'], () => import('../routes/Equipment/EquipmentList')),
+          },
+          {
+            name: '设备列表',
+            path: 'equipmentDetailList',
+            component: dynamicWrapper(app, ['equipmentDetailList'], () => import('../routes/Equipment/EquipmentDetailList')),
           },
         ],
       },
